@@ -31,11 +31,13 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Microsoft.VisualBasic" />
     <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\packages\Newtonsoft.Json.12.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.IO.Compression.FileSystem" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -47,15 +49,15 @@
     <Compile Include="Game\GameState.cs" />
     <Compile Include="Game\Instance.cs" />
     <Compile Include="Game\Launcher.cs" />
+    <Compile Include="Install\FileDownloader.cs" />
+    <Compile Include="Install\Installer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Settings\LaunchSettings.cs" />
     <Compile Include="Settings\Login.cs" />
     <Compile Include="Settings\Server.cs" />
+    <Compile Include="Update\Patcher.cs" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Install\" />
-    <Folder Include="Update\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
