@@ -21,7 +21,8 @@ namespace PSUtil.ManagedClient
         Launcher launcher = new Launcher();
         LaunchSettings Settings = new LaunchSettings();
         Installer installer = new Installer();
-        
+        public static int Progress = 0;
+        public InstallationStatus InstallationStatus = InstallationStatus.Not_Installed;
         public void SetServer(Server server)
         {
             Settings.PlayServer = server;
@@ -30,9 +31,10 @@ namespace PSUtil.ManagedClient
         {
             Servers.Add(server);
         }
-        public void AddPatch(Patch patch)
+        public void ApplyPatch(Patch patch)
         {
             patcher.ApplyPatch(patch, Settings);
+            InstallationStatus = InstallationStatus.Modded;
         }
         public void CleanInstall()
         {
@@ -40,6 +42,7 @@ namespace PSUtil.ManagedClient
             Settings.LaunchPath = Directory.GetCurrentDirectory() + @"\PlanetSide\";
             patcher.RestoreBaseInstall();
             CurrentlyApplied = new List<Patch>();
+            InstallationStatus = InstallationStatus.Installed;
         }
         public void CleanInstall(String CUSTOMURL)
         {
@@ -47,25 +50,24 @@ namespace PSUtil.ManagedClient
             Settings.LaunchPath = Directory.GetCurrentDirectory() + @"\PlanetSide\";
             patcher.RestoreBaseInstall();
             CurrentlyApplied = new List<Patch>();
+            InstallationStatus = InstallationStatus.Modded;
         }
         public void RestoreInstall()
         {
             patcher.RestoreBaseInstall();
             CurrentlyApplied = new List<Patch>();
+            InstallationStatus = InstallationStatus.Installed;
         }
         public int GetProgress()
         {
-            if(installer.Progress == 100 && patcher.PatchProgress == 100)
+            if (InstallationStatus == InstallationStatus.Not_Installed && Progress == 0)
             {
-                return 100;
-            }
-            else if(installer.Progress != 100)
-            {
-                return installer.Progress;
+                Double res = FileDownloader.Received_Bytes / 1978539839d * 100d;
+                return Convert.ToInt32(res); //File Size of default PS Installation, mitigation for google Drive not setting content-length
             }
             else
             {
-                return patcher.PatchProgress;
+                return Progress;
             }
         }
         public void SaveClient()
@@ -96,5 +98,14 @@ namespace PSUtil.ManagedClient
         {
             return File.Exists(Directory.GetCurrentDirectory() + "/Client/config.json");
         }
+        public GameState gameState()
+        {
+            return launcher.instance.gameState;
+        }
+        public void Launch()
+        {
+            launcher.Launch(Settings);
+        }
     }
+    
 }

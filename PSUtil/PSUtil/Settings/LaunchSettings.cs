@@ -25,7 +25,7 @@ namespace PSUtil.Settings
             }
         }
         public string LaunchParams;
-        public Server PlayServer;
+        public Server PlayServer = new Server("play.psforever.net:51200");
         public Login Authentication;
         public void SaveSettings(String Path)
         {

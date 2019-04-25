@@ -2,10 +2,12 @@
 using System.IO;
 using System.Net;
 using System.Collections.Generic;
+using System.Threading;
 //https://gist.github.com/yasirkula/d0ec0c07b138748e5feaecbd93b6223c
 public static class FileDownloader
 {
     public static int Progress;
+    public static long Received_Bytes;
     private const string GOOGLE_DRIVE_DOMAIN = "drive.google.com";
     private const string GOOGLE_DRIVE_DOMAIN2 = "https://drive.google.com";
 
@@ -29,14 +31,26 @@ public static class FileDownloader
                 using (webClient = new WebClient())
                 {
                     webClient.DownloadProgressChanged += ProgressHandler;
-                    webClient.DownloadFile(url, path);
+                    webClient.DownloadFileCompleted += WebClient_DownloadFileCompleted;
+                    var lockobj = new Object();
+                    lock (lockobj)
+                    {
+                        webClient.DownloadFileAsync(new Uri(url), path, lockobj);
+                        Monitor.Wait(lockobj);
+                    }
                     return new FileInfo(path);
                 }
             }
             else
             {
                 webClient.DownloadProgressChanged += ProgressHandler;
-                webClient.DownloadFile(url, path);
+                webClient.DownloadFileCompleted += WebClient_DownloadFileCompleted;
+                var lockobj = new Object();
+                lock (lockobj)
+                {
+                    webClient.DownloadFileAsync(new Uri(url), path, lockobj);
+                    Monitor.Wait(lockobj);
+                }
                 return new FileInfo(path);
             }
         }
@@ -45,8 +59,20 @@ public static class FileDownloader
             return null;
         }
     }
+
+    private static void WebClient_DownloadFileCompleted(object sender, System.ComponentModel.AsyncCompletedEventArgs e)
+    {
+        lock (e.UserState)
+        {
+            //releases blocked thread
+            Monitor.Pulse(e.UserState);
+        }
+    }
+    
     public static void ProgressHandler(object sender, DownloadProgressChangedEventArgs e)
     {
+        //Google Drive doesnt support content-length, the progress precentage calculation fails because of that
+        Received_Bytes = e.BytesReceived;
         Progress = e.ProgressPercentage;
     }
     // Downloading large files from Google Drive prompts a warning screen and

@@ -41,4 +41,8 @@ namespace PSUtil.Install
                     FileSystem.CopyDirectory(Directory.GetCurrentDirectory() + @"/PlanetSideBase/PlanetSide", Directory.GetCurrentDirectory() + @"/PlanetSide/");
         }
     }
+    public enum InstallationStatus
+    {
+        Installed, Modded, Not_Installed
+    }
 }
