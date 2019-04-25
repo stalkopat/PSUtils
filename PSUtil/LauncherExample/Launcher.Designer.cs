@@ -36,6 +36,8 @@
             this.GameStatus = new MetroFramework.Controls.MetroLabel();
             this.ServerTextBox = new MetroFramework.Controls.MetroTextBox();
             this.metroLabel3 = new MetroFramework.Controls.MetroLabel();
+            this.ProgressBarStatusText = new MetroFramework.Controls.MetroLabel();
+            this.DownloadStatus = new MetroFramework.Controls.MetroLabel();
             this.SuspendLayout();
             // 
             // ProgressBar
@@ -105,11 +107,29 @@
             this.metroLabel3.TabIndex = 7;
             this.metroLabel3.Text = "Server:";
             // 
+            // ProgressBarStatusText
+            // 
+            this.ProgressBarStatusText.AutoSize = true;
+            this.ProgressBarStatusText.Location = new System.Drawing.Point(283, 404);
+            this.ProgressBarStatusText.Name = "ProgressBarStatusText";
+            this.ProgressBarStatusText.Size = new System.Drawing.Size(0, 0);
+            this.ProgressBarStatusText.TabIndex = 8;
+            // 
+            // DownloadStatus
+            // 
+            this.DownloadStatus.AutoSize = true;
+            this.DownloadStatus.Location = new System.Drawing.Point(23, 430);
+            this.DownloadStatus.Name = "DownloadStatus";
+            this.DownloadStatus.Size = new System.Drawing.Size(0, 0);
+            this.DownloadStatus.TabIndex = 9;
+            // 
             // Launcher
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 450);
+            this.Controls.Add(this.DownloadStatus);
+            this.Controls.Add(this.ProgressBarStatusText);
             this.Controls.Add(this.metroLabel3);
             this.Controls.Add(this.ServerTextBox);
             this.Controls.Add(this.GameStatus);
@@ -137,6 +157,8 @@
         private MetroFramework.Controls.MetroLabel GameStatus;
         private MetroFramework.Controls.MetroTextBox ServerTextBox;
         private MetroFramework.Controls.MetroLabel metroLabel3;
+        private MetroFramework.Controls.MetroLabel ProgressBarStatusText;
+        private MetroFramework.Controls.MetroLabel DownloadStatus;
     }
 }
 

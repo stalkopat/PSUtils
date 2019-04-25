@@ -27,12 +27,16 @@ namespace LauncherExample
                 {
                     ProgressBar.Invoke(new Action(() => {
                         int Progress = Client.GetProgress();
-                        ProgressBar.Value = Progress; }));
+                        ProgressBar.Value = Progress;
+                        
+                    }));
+                    DownloadStatus.Invoke(new Action(() => { DownloadStatus.Text = Client.getInstallStatusMessage(); }));
                     InstallationStatus.Invoke(new Action(() => { InstallationStatus.Text = Client.InstallationStatus.ToString(); }));
                     LaunchButton.Invoke(new Action(() =>
                     {
                         if (Client.InstallationStatus != PSUtil.Install.InstallationStatus.Not_Installed)
                         {
+                            LaunchButton.Enabled = true;
                             LaunchButton.Text = "PLAY";
                         }
                         else
@@ -46,7 +50,7 @@ namespace LauncherExample
             });
             
         }
-
+        
         private void Launcher_FormClosing(object sender, FormClosingEventArgs e)
         {
             Client.SaveClient();
@@ -62,7 +66,11 @@ namespace LauncherExample
             else
             {
                 ThreadPool.QueueUserWorkItem(x => { Client.CleanInstall(); });
+                LaunchButton.Enabled = false;
             }
         }
+
+        
     }
+    
 }

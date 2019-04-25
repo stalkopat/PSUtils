@@ -14,13 +14,13 @@ namespace PSUtil.ManagedClient
 {
     public class Client
     {
-        List<Patch> patches = new List<Patch>();
-        List<Patch> CurrentlyApplied = new List<Patch>();
-        List<Server> Servers = new List<Server>();
-        Patcher patcher = new Patcher();
-        Launcher launcher = new Launcher();
-        LaunchSettings Settings = new LaunchSettings();
-        Installer installer = new Installer();
+        public List<Patch> patches = new List<Patch>();
+        public List<Patch> CurrentlyApplied = new List<Patch>();
+        public List<Server> Servers = new List<Server>();
+        public Patcher patcher = new Patcher();
+        public Launcher launcher = new Launcher();
+        public LaunchSettings Settings = new LaunchSettings();
+        public Installer installer = new Installer();
         public static int Progress = 0;
         public InstallationStatus InstallationStatus = InstallationStatus.Not_Installed;
         public void SetServer(Server server)
@@ -101,6 +101,21 @@ namespace PSUtil.ManagedClient
         public GameState gameState()
         {
             return launcher.instance.gameState;
+        }
+        public string getInstallStatusMessage()
+        {
+            if(GetProgress() > 0)
+            {
+                return "Downloading...";
+            }
+            else if(GetProgress() == 100)
+            {
+                return "Unpacking Files and Building Base Installation...";
+            }
+            else
+            {
+                return "";
+            }
         }
         public void Launch()
         {
