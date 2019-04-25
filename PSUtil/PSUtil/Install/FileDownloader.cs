@@ -5,13 +5,15 @@ using System.Collections.Generic;
 //https://gist.github.com/yasirkula/d0ec0c07b138748e5feaecbd93b6223c
 public static class FileDownloader
 {
+    public static int Progress;
     private const string GOOGLE_DRIVE_DOMAIN = "drive.google.com";
     private const string GOOGLE_DRIVE_DOMAIN2 = "https://drive.google.com";
 
     // Normal example: FileDownloader.DownloadFileFromURLToPath( "http://example.com/file/download/link", @"C:\file.txt" );
     // Drive example: FileDownloader.DownloadFileFromURLToPath( "http://drive.google.com/file/d/FILEID/view?usp=sharing", @"C:\file.txt" );
-    public static FileInfo DownloadFileFromURLToPath(string url, string path)
+    public static FileInfo DownloadFileFromURLToPath(string url, string path, ref int Progress)
     {
+        FileDownloader.Progress = Progress;
         if (url.StartsWith(GOOGLE_DRIVE_DOMAIN) || url.StartsWith(GOOGLE_DRIVE_DOMAIN2))
             return DownloadGoogleDriveFileFromURLToPath(url, path);
         else
@@ -26,12 +28,14 @@ public static class FileDownloader
             {
                 using (webClient = new WebClient())
                 {
+                    webClient.DownloadProgressChanged += ProgressHandler;
                     webClient.DownloadFile(url, path);
                     return new FileInfo(path);
                 }
             }
             else
             {
+                webClient.DownloadProgressChanged += ProgressHandler;
                 webClient.DownloadFile(url, path);
                 return new FileInfo(path);
             }
@@ -41,7 +45,10 @@ public static class FileDownloader
             return null;
         }
     }
-
+    public static void ProgressHandler(object sender, DownloadProgressChangedEventArgs e)
+    {
+        Progress = e.ProgressPercentage;
+    }
     // Downloading large files from Google Drive prompts a warning screen and
     // requires manual confirmation. Consider that case and try to confirm the download automatically
     // if warning prompt occurs

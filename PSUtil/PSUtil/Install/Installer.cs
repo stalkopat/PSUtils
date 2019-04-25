@@ -30,11 +30,15 @@ namespace PSUtil.Install
             {
 
             }
-            FileDownloader.DownloadFileFromURLToPath(URL,   @"PlanetSideBase /Zipfile.zip");
+            
+            FileDownloader.DownloadFileFromURLToPath(URL,   @"PlanetSideBase /Zipfile.zip", ref Progress);
 
             ZipFile.ExtractToDirectory(@"PlanetSideBase/Zipfile.zip", @"PlanetSideBase/");
 
             File.Delete(@"PlanetSideBase/Zipfile.zip");
+
+            new Microsoft.VisualBasic.Devices.Computer().
+                    FileSystem.CopyDirectory(Directory.GetCurrentDirectory() + @"/PlanetSideBase/PlanetSide", Directory.GetCurrentDirectory() + @"/PlanetSide/");
         }
     }
 }

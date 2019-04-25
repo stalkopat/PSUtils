@@ -9,9 +9,10 @@ namespace PSUtil.Update
 {
     public class Patcher
     {
+        public int PatchProgress = 0;
         public void ApplyPatch(Patch patch, Settings.LaunchSettings settings)
         {
-            patch.PrepareForPatching();
+            patch.PrepareForPatching(ref PatchProgress);
 
             foreach (String PatchedFile in patch.Modified_Files)
             {

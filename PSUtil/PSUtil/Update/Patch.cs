@@ -15,14 +15,14 @@ namespace PSUtil.Update
         public String DownloadURL;
         public String Name;
         String DownloadedPath;
-        public void PrepareForPatching()
+        public void PrepareForPatching(ref int Progress)
         {
             DownloadedPath = Directory.GetCurrentDirectory() + @"/ModDir/" + Name + "/";
             if (! Directory.Exists(DownloadedPath))
             {
                 Directory.CreateDirectory(DownloadedPath);
             }
-            FileDownloader.DownloadFileFromURLToPath(DownloadURL, DownloadedPath + "Mod.psmod");
+            FileDownloader.DownloadFileFromURLToPath(DownloadURL, DownloadedPath + "Mod.psmod", ref Progress);
             try
             {
                 Directory.Delete(DownloadedPath + "Extracted/", true);
