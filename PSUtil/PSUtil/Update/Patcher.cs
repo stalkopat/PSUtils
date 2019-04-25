@@ -9,15 +9,21 @@ namespace PSUtil.Update
 {
     public class Patcher
     {
-        public void ApplyPatch(String URL, Settings.LaunchSettings settings)
+        public void ApplyPatch(Patch patch, Settings.LaunchSettings settings)
         {
-            FileDownloader.DownloadFileFromURLToPath(URL, @"/ModDir/");
+            patch.PrepareForPatching();
+
+            foreach (String PatchedFile in patch.Modified_Files)
+            {
+                File.Copy(Directory.GetCurrentDirectory() + @"/ModDir/"+ patch.Name + "/Extracted/" + PatchedFile, Directory.GetCurrentDirectory() + @"/PlanetSide/" + PatchedFile, true);
+            }
 
         }
         public void RestoreBaseInstall()
         {
             DeleteBinaries();
-            try {
+            try
+            {
                 new Microsoft.VisualBasic.Devices.Computer().
                     FileSystem.CopyDirectory(Directory.GetCurrentDirectory() + @"/PlanetSideBase/PlanetSide", Directory.GetCurrentDirectory() + @"/PlanetSide/");
             }
@@ -29,9 +35,10 @@ namespace PSUtil.Update
         private void DeleteBinaries()
         {
             string[] files = Directory.GetFiles(Directory.GetCurrentDirectory() + @"/PlanetSide/", "*", SearchOption.AllDirectories);
-            for(int i = 0; i< files.Length; i++)
+            for (int i = 0; i < files.Length; i++)
             {
-                switch(Path.GetExtension(files[i])){
+                switch (Path.GetExtension(files[i]))
+                {
                     case ".txt":
                         if (Path.GetFileNameWithoutExtension(files[i]).Contains("news_unicode"))
                         {

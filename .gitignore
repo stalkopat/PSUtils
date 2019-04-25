@@ -334,3 +334,6 @@ PlanetSide/
 
 #Testing Folder
 PSUtil/DEMO/
+
+#Ghidra for reversing PS1Pack
+ghidra_9.0.2/

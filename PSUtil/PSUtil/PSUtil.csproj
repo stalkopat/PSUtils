@@ -55,6 +55,7 @@
     <Compile Include="Settings\LaunchSettings.cs" />
     <Compile Include="Settings\Login.cs" />
     <Compile Include="Settings\Server.cs" />
+    <Compile Include="Update\Patch.cs" />
     <Compile Include="Update\Patcher.cs" />
   </ItemGroup>
   <ItemGroup />
