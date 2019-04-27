@@ -34,6 +34,7 @@ namespace PSUtil.ManagedClient
         public void ApplyPatch(Patch patch)
         {
             patcher.ApplyPatch(patch, Settings);
+            CurrentlyApplied.Add(patch);
             InstallationStatus = InstallationStatus.Modded;
         }
         public void CleanInstall()
@@ -67,7 +68,7 @@ namespace PSUtil.ManagedClient
             }
             else
             {
-                return Progress;
+                return FileDownloader.Progress;
             }
         }
         public void SaveClient()
@@ -116,6 +117,19 @@ namespace PSUtil.ManagedClient
             {
                 return "";
             }
+        }
+        public List<Patch> getNotInstalledPatches()
+        {
+            return patches.Where(p => CurrentlyApplied.Contains(p)).ToList();
+        }
+        public String getInstalledPatches()
+        {
+            String s = "";
+            foreach(Patch p in CurrentlyApplied)
+            {
+                s += p.Name + "\n";
+            }
+            return s;
         }
         public void Launch()
         {

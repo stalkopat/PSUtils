@@ -12,7 +12,7 @@ namespace PSUtil.Update
         public int PatchProgress = 0;
         public void ApplyPatch(Patch patch, Settings.LaunchSettings settings)
         {
-            patch.PrepareForPatching(ref PatchProgress);
+            patch.PrepareForPatching();
 
             foreach (String PatchedFile in patch.Modified_Files)
             {

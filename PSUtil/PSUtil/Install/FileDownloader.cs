@@ -13,7 +13,7 @@ public static class FileDownloader
 
     // Normal example: FileDownloader.DownloadFileFromURLToPath( "http://example.com/file/download/link", @"C:\file.txt" );
     // Drive example: FileDownloader.DownloadFileFromURLToPath( "http://drive.google.com/file/d/FILEID/view?usp=sharing", @"C:\file.txt" );
-    public static FileInfo DownloadFileFromURLToPath(string url, string path, ref int Progress)
+    public static FileInfo DownloadFileFromURLToPath(string url, string path)
     {
         FileDownloader.Progress = Progress;
         if (url.StartsWith(GOOGLE_DRIVE_DOMAIN) || url.StartsWith(GOOGLE_DRIVE_DOMAIN2))
@@ -30,8 +30,8 @@ public static class FileDownloader
             {
                 using (webClient = new WebClient())
                 {
-                    webClient.DownloadProgressChanged += ProgressHandler;
-                    webClient.DownloadFileCompleted += WebClient_DownloadFileCompleted;
+                    webClient.DownloadProgressChanged += new DownloadProgressChangedEventHandler(ProgressHandler);
+                    webClient.DownloadFileCompleted += new System.ComponentModel.AsyncCompletedEventHandler(WebClient_DownloadFileCompleted);
                     var lockobj = new Object();
                     lock (lockobj)
                     {
@@ -43,8 +43,8 @@ public static class FileDownloader
             }
             else
             {
-                webClient.DownloadProgressChanged += ProgressHandler;
-                webClient.DownloadFileCompleted += WebClient_DownloadFileCompleted;
+                webClient.DownloadProgressChanged += new DownloadProgressChangedEventHandler(ProgressHandler);
+                webClient.DownloadFileCompleted += new System.ComponentModel.AsyncCompletedEventHandler(WebClient_DownloadFileCompleted);
                 var lockobj = new Object();
                 lock (lockobj)
                 {

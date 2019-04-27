@@ -14,6 +14,7 @@ using PSUtil.ManagedClient;
 using PSUtil.Settings;
 using Newtonsoft.Json;
 using System.IO;
+using PSUtil.Update;
 namespace LauncherExample
 {
     public partial class Launcher :  MetroForm
@@ -44,8 +45,18 @@ namespace LauncherExample
                             LaunchButton.Text = "INSTALL";
                         }
                     }));
+                    InstalledMods.Invoke(new Action(() => {
+                        string Patches = "";
+                        foreach(Patch patch in Client.CurrentlyApplied)
+                        {
+                            Patches += patch.Name + "\n";
+                        }
+                        InstalledMods.Text = Patches;
+                    }));
+                    InstalledMods.Invoke(new Action(() => { InstalledMods.Text = Client.getInstalledPatches(); }));
                     GameStatus.Invoke(new Action(() => { GameStatus.Text = Client.gameState().ToString(); }));
                     Thread.Sleep(100);
+                    
                 }
             });
             
@@ -70,7 +81,17 @@ namespace LauncherExample
             }
         }
 
-        
+        private void metroButton1_Click(object sender, EventArgs e)
+        {
+            Patch patch = new Patch();
+            patch.DownloadURL = PatchURL.Text;
+            ThreadPool.QueueUserWorkItem(x => { Client.ApplyPatch(patch); });
+        }
+
+        private void metroButton2_Click(object sender, EventArgs e)
+        {
+            ThreadPool.QueueUserWorkItem(x => { Client.RestoreInstall(); });
+        }
     }
     
 }

@@ -38,6 +38,11 @@
             this.metroLabel3 = new MetroFramework.Controls.MetroLabel();
             this.ProgressBarStatusText = new MetroFramework.Controls.MetroLabel();
             this.DownloadStatus = new MetroFramework.Controls.MetroLabel();
+            this.InstalledMods = new MetroFramework.Controls.MetroTile();
+            this.PatchURL = new MetroFramework.Controls.MetroTextBox();
+            this.metroLabel4 = new MetroFramework.Controls.MetroLabel();
+            this.metroButton1 = new MetroFramework.Controls.MetroButton();
+            this.metroButton2 = new MetroFramework.Controls.MetroButton();
             this.SuspendLayout();
             // 
             // ProgressBar
@@ -123,11 +128,58 @@
             this.DownloadStatus.Size = new System.Drawing.Size(0, 0);
             this.DownloadStatus.TabIndex = 9;
             // 
+            // InstalledMods
+            // 
+            this.InstalledMods.Location = new System.Drawing.Point(531, 63);
+            this.InstalledMods.Name = "InstalledMods";
+            this.InstalledMods.Size = new System.Drawing.Size(246, 61);
+            this.InstalledMods.TabIndex = 10;
+            // 
+            // PatchURL
+            // 
+            this.PatchURL.Location = new System.Drawing.Point(531, 153);
+            this.PatchURL.Name = "PatchURL";
+            this.PatchURL.PromptText = "URL";
+            this.PatchURL.Size = new System.Drawing.Size(246, 23);
+            this.PatchURL.TabIndex = 11;
+            // 
+            // metroLabel4
+            // 
+            this.metroLabel4.AutoSize = true;
+            this.metroLabel4.Location = new System.Drawing.Point(531, 131);
+            this.metroLabel4.Name = "metroLabel4";
+            this.metroLabel4.Size = new System.Drawing.Size(106, 19);
+            this.metroLabel4.TabIndex = 12;
+            this.metroLabel4.Text = "Install new Patch:";
+            // 
+            // metroButton1
+            // 
+            this.metroButton1.Location = new System.Drawing.Point(531, 183);
+            this.metroButton1.Name = "metroButton1";
+            this.metroButton1.Size = new System.Drawing.Size(103, 23);
+            this.metroButton1.TabIndex = 13;
+            this.metroButton1.Text = "Install";
+            this.metroButton1.Click += new System.EventHandler(this.metroButton1_Click);
+            // 
+            // metroButton2
+            // 
+            this.metroButton2.Location = new System.Drawing.Point(641, 183);
+            this.metroButton2.Name = "metroButton2";
+            this.metroButton2.Size = new System.Drawing.Size(136, 23);
+            this.metroButton2.TabIndex = 14;
+            this.metroButton2.Text = "Remove All Patches";
+            this.metroButton2.Click += new System.EventHandler(this.metroButton2_Click);
+            // 
             // Launcher
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 450);
+            this.Controls.Add(this.metroButton2);
+            this.Controls.Add(this.metroButton1);
+            this.Controls.Add(this.metroLabel4);
+            this.Controls.Add(this.PatchURL);
+            this.Controls.Add(this.InstalledMods);
             this.Controls.Add(this.DownloadStatus);
             this.Controls.Add(this.ProgressBarStatusText);
             this.Controls.Add(this.metroLabel3);
@@ -159,6 +211,11 @@
         private MetroFramework.Controls.MetroLabel metroLabel3;
         private MetroFramework.Controls.MetroLabel ProgressBarStatusText;
         private MetroFramework.Controls.MetroLabel DownloadStatus;
+        private MetroFramework.Controls.MetroTile InstalledMods;
+        private MetroFramework.Controls.MetroTextBox PatchURL;
+        private MetroFramework.Controls.MetroLabel metroLabel4;
+        private MetroFramework.Controls.MetroButton metroButton1;
+        private MetroFramework.Controls.MetroButton metroButton2;
     }
 }
 

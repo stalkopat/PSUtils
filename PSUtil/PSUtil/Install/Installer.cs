@@ -31,7 +31,7 @@ namespace PSUtil.Install
 
             }
             
-            FileDownloader.DownloadFileFromURLToPath(URL,   @"PlanetSideBase /Zipfile.zip", ref Progress);
+            FileDownloader.DownloadFileFromURLToPath(URL,   @"PlanetSideBase /Zipfile.zip");
 
             ZipFile.ExtractToDirectory(@"PlanetSideBase/Zipfile.zip", @"PlanetSideBase/");
 

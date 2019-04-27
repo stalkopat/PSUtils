@@ -5,12 +5,14 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Diagnostics;
 using System.IO;
+using Newtonsoft.Json;
 
 namespace PSUtil.Game
 {
     public class Launcher
     {
         public Settings.LaunchSettings settings;
+        [JsonIgnore]
         public Instance instance = new Instance();
         public void Launch(Settings.LaunchSettings settings)
         {

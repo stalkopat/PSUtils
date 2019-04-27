@@ -15,36 +15,81 @@ namespace PSUtil.Update
         public String DownloadURL;
         public String Name;
         String DownloadedPath;
-        public void PrepareForPatching(ref int Progress)
+        public void PrepareForPatching()
         {
-            DownloadedPath = Directory.GetCurrentDirectory() + @"/ModDir/" + Name + "/";
-            if (! Directory.Exists(DownloadedPath))
+            if(DownloadURL == null && DownloadedPath == null)
             {
-                Directory.CreateDirectory(DownloadedPath);
+                throw new MissingURLException("Missing URL, please supply an URL");
             }
-            FileDownloader.DownloadFileFromURLToPath(DownloadURL, DownloadedPath + "Mod.psmod", ref Progress);
-            try
+
+            if (DownloadedPath != null)
             {
-                Directory.Delete(DownloadedPath + "Extracted/", true);
-                ZipFile.ExtractToDirectory(DownloadedPath + "Mod.psmod", DownloadedPath + "Extracted/");
-                File.Delete(DownloadedPath + "config.json");
-                File.Move(DownloadedPath + "Extracted/config.json", DownloadedPath + "config.json");
-                StreamReader reader = new StreamReader(DownloadedPath + "config.json");
+                var tempdir = Directory.CreateDirectory(Path.GetRandomFileName());
+                File.Move(DownloadedPath, tempdir.FullName+"/Mod.psmod");
+                ZipFile.ExtractToDirectory(tempdir.FullName + "Mod.psmod", tempdir.FullName + "/Extracted/");
+                StreamReader reader = new StreamReader(tempdir.FullName + "/Extracted/" + "config.json");
                 Patch configpatch = JsonConvert.DeserializeObject<Patch>(reader.ReadToEnd());
+                reader.Dispose();
+                Name = configpatch.Name;
+                DownloadedPath = Directory.GetCurrentDirectory() + @"/ModDir/" + Name + "/";
+                tempdir.MoveTo(DownloadedPath);
                 Modified_Files = configpatch.Modified_Files;
-                DownloadedPath =  @"/ModDir/" + Name + "/";
             }
-            catch(Exception e)
+            else if (Name != null && DownloadURL != null)
             {
-                DownloadedPath = @"/ModDir/" + Name + "/";
-                throw new MalFormedPatchException("Patching failed, prehaps config.json is missing or the Download Failed");
+                DownloadedPath = Directory.GetCurrentDirectory() + @"/ModDir/" + Name + "/";
+                if (!Directory.Exists(DownloadedPath))
+                {
+                    Directory.CreateDirectory(DownloadedPath);
+                }
+                FileDownloader.DownloadFileFromURLToPath(DownloadURL, DownloadedPath + "Mod.psmod");
+                
+                try
+                {
+                    Directory.Delete(DownloadedPath + "Extracted/", true);
+                    ZipFile.ExtractToDirectory(DownloadedPath + "Mod.psmod", DownloadedPath + "Extracted/");
+                    File.Delete(DownloadedPath + "config.json");
+                    File.Move(DownloadedPath + "Extracted/config.json", DownloadedPath + "config.json");
+                    StreamReader reader = new StreamReader(DownloadedPath + "config.json");
+                    Patch configpatch = JsonConvert.DeserializeObject<Patch>(reader.ReadToEnd());
+                    reader.Dispose();
+                    Modified_Files = configpatch.Modified_Files;
+                    DownloadedPath = @"/ModDir/" + Name + "/";
+                    return;
+                }
+                catch (Exception e)
+                {
+                    DownloadedPath = @"/ModDir/" + Name + "/";
+                    throw new MalFormedPatchException("Patching failed, prehaps config.json is missing or the Download Failed");
+                }
             }
+            else
+            {
+                var tempdir = Directory.CreateDirectory("ModDir/"+Path.GetRandomFileName());
+                FileDownloader.DownloadFileFromURLToPath(DownloadURL, tempdir.FullName + "/Mod.psmod");
+                ZipFile.ExtractToDirectory(tempdir.FullName + "/Mod.psmod", tempdir.FullName + "/Extracted/");
+                StreamReader reader = new StreamReader(tempdir.FullName + "/Extracted/" + "config.json");
+                Patch configpatch = JsonConvert.DeserializeObject<Patch>(reader.ReadToEnd());
+                reader.Dispose();
+                Name = configpatch.Name;
+                DownloadedPath = Directory.GetCurrentDirectory() + @"/ModDir/" + Name + "/";
+                tempdir.MoveTo(DownloadedPath);
+                Modified_Files = configpatch.Modified_Files;
+            }
+
         }
     }
     class MalFormedPatchException : Exception
     {
         public MalFormedPatchException(string message) : base(message)
         {
+        }
+    }
+    class MissingURLException : Exception
+    {
+        public MissingURLException(string message) : base(message)
+        {
+
         }
     }
 }
