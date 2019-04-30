@@ -7,6 +7,7 @@ using PSUtil.Game;
 using PSUtil.Install;
 using PSUtil.Settings;
 using PSUtil.Update;
+using PSUtil.Verification;
 using System.IO;
 using Newtonsoft.Json;
 
@@ -21,8 +22,10 @@ namespace PSUtil.ManagedClient
         public Launcher launcher = new Launcher();
         public LaunchSettings Settings = new LaunchSettings();
         public Installer installer = new Installer();
+        public string HashSum;
         public static int Progress = 0;
         public InstallationStatus InstallationStatus = InstallationStatus.Not_Installed;
+        public InProgressOperation inProgressOperation = InProgressOperation.None;
         public void SetServer(Server server)
         {
             Settings.PlayServer = server;
@@ -33,34 +36,65 @@ namespace PSUtil.ManagedClient
         }
         public void ApplyPatch(Patch patch)
         {
+            inProgressOperation = InProgressOperation.Modding;
             patcher.ApplyPatch(patch, Settings);
             CurrentlyApplied.Add(patch);
             InstallationStatus = InstallationStatus.Modded;
+            inProgressOperation = InProgressOperation.None;
         }
         public void CleanInstall()
         {
+            inProgressOperation = InProgressOperation.Installation;
             installer.StartInstall();
             Settings.LaunchPath = Directory.GetCurrentDirectory() + @"\PlanetSide\";
             patcher.RestoreBaseInstall();
             CurrentlyApplied = new List<Patch>();
             InstallationStatus = InstallationStatus.Installed;
+            inProgressOperation = InProgressOperation.None;
         }
         public void CleanInstall(String CUSTOMURL)
         {
+            inProgressOperation = InProgressOperation.Installation;
             installer.StartInstall(CUSTOMURL);
             Settings.LaunchPath = Directory.GetCurrentDirectory() + @"\PlanetSide\";
             patcher.RestoreBaseInstall();
             CurrentlyApplied = new List<Patch>();
             InstallationStatus = InstallationStatus.Modded;
+            inProgressOperation = InProgressOperation.None;
         }
         public void RestoreInstall()
         {
+            inProgressOperation = InProgressOperation.Restore;
             patcher.RestoreBaseInstall();
             CurrentlyApplied = new List<Patch>();
             InstallationStatus = InstallationStatus.Installed;
+            inProgressOperation = InProgressOperation.None;
+        }
+        public String getInstallChecksum()
+        {
+            inProgressOperation = InProgressOperation.Verification;
+            var rtn = Checksums.GetInstallationHash(Settings);
+            inProgressOperation = InProgressOperation.None;
+            return rtn;
+        }
+        public bool getFileIntegrity()
+        {
+            inProgressOperation = InProgressOperation.Verification;
+            bool rtn;
+            if (InstallationStatus == InstallationStatus.Modded) { 
+                rtn = patcher.IntegrityCheck(Settings, CurrentlyApplied[0]);
+            }
+            else
+            {
+                rtn = patcher.IntegrityCheck(Settings);
+            }
+            HashSum = patcher.currenthash;
+            inProgressOperation = InProgressOperation.None;
+            return rtn;  
         }
         public int GetProgress()
         {
+            if(inProgressOperation == InProgressOperation.Installation) { 
             if (InstallationStatus == InstallationStatus.Not_Installed && Progress == 0)
             {
                 Double res = FileDownloader.Received_Bytes / 1978539839d * 100d;
@@ -69,6 +103,18 @@ namespace PSUtil.ManagedClient
             else
             {
                 return FileDownloader.Progress;
+            }
+            }
+            else if(inProgressOperation == InProgressOperation.Restore)
+            {
+                return Patcher.PatchProgress;
+            }else if(inProgressOperation == InProgressOperation.Verification)
+            {
+                return Checksums.InstallationHashProgress;
+            }
+            else
+            {
+                return 100;
             }
         }
         public void SaveClient()
@@ -105,13 +151,30 @@ namespace PSUtil.ManagedClient
         }
         public string getInstallStatusMessage()
         {
-            if(GetProgress() > 0)
+            if (inProgressOperation == InProgressOperation.Installation)
             {
-                return "Downloading...";
+                if (GetProgress() > 0)
+                {
+                    return "Downloading...";
+                }
+                else if (GetProgress() > 98)
+                {
+                    return "Unpacking Files and Building Base Installation...";
+                }
+                else
+                {
+                    return "";
+                }
             }
-            else if(GetProgress() == 100)
+            else if(inProgressOperation == InProgressOperation.None)
             {
-                return "Unpacking Files and Building Base Installation...";
+                return "Ready to Play!";
+            }else if(inProgressOperation == InProgressOperation.Modding)
+            {
+                return "Applying Mod...";
+            }else if(inProgressOperation == InProgressOperation.Restore)
+            {
+                return "Restoring Original Installation...";
             }
             else
             {
@@ -136,5 +199,8 @@ namespace PSUtil.ManagedClient
             launcher.Launch(Settings);
         }
     }
-    
+    public enum InProgressOperation
+    {
+        None, Modding, Restore, Installation, Verification
+    }
 }

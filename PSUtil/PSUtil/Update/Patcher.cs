@@ -4,12 +4,15 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.IO;
+using System.Threading;
+using PSUtil.Verification;
 
 namespace PSUtil.Update
 {
     public class Patcher
     {
-        public int PatchProgress = 0;
+        public static int PatchProgress = 0;
+        public string currenthash;
         public void ApplyPatch(Patch patch, Settings.LaunchSettings settings)
         {
             patch.PrepareForPatching();
@@ -18,15 +21,43 @@ namespace PSUtil.Update
             {
                 File.Copy(Directory.GetCurrentDirectory() + @"/ModDir/"+ patch.Name + "/Extracted/" + PatchedFile, Directory.GetCurrentDirectory() + @"/PlanetSide/" + PatchedFile, true);
             }
-
+            
+        }
+        public bool IntegrityCheck(Settings.LaunchSettings settings)
+        {
+            currenthash = Checksums.GetInstallationHash(settings);
+            if(currenthash == "1014c2a973f9ccd2a310039eb484dc27")
+            {
+                return true;
+            }
+            return false;
+        }
+        public bool IntegrityCheck(Settings.LaunchSettings settings, Patch patch)
+        {
+            currenthash = Checksums.GetInstallationHash(settings);
+            if (currenthash == patch.ExpectedHash)
+            {
+                return true;
+            }
+            return false;
         }
         public void RestoreBaseInstall()
         {
             DeleteBinaries();
             try
             {
-                new Microsoft.VisualBasic.Devices.Computer().
-                    FileSystem.CopyDirectory(Directory.GetCurrentDirectory() + @"/PlanetSideBase/PlanetSide", Directory.GetCurrentDirectory() + @"/PlanetSide/");
+                ThreadPool.QueueUserWorkItem(x =>
+                {
+                    while(Directory.GetFiles(Directory.GetCurrentDirectory() + @"/PlanetSideBase/PlanetSide", "*", SearchOption.AllDirectories).Length > Directory.GetFiles(Directory.GetCurrentDirectory() + @"/PlanetSide/", "*", SearchOption.AllDirectories).Length)
+                    {
+                        int dir1 = Directory.GetFiles(Directory.GetCurrentDirectory() + @"/PlanetSide/", "*", SearchOption.AllDirectories).Length;
+                        int dir2 = Directory.GetFiles(Directory.GetCurrentDirectory() + @"/PlanetSideBase/PlanetSide", "*", SearchOption.AllDirectories).Length;
+                        PatchProgress = 50 + Convert.ToInt32(((double)dir1 / (double)dir2 * 50));
+                    }
+                });
+                new Microsoft.VisualBasic.Devices.Computer().FileSystem
+                    .CopyDirectory(Directory.GetCurrentDirectory() + @"/PlanetSideBase/PlanetSide", Directory.GetCurrentDirectory() + @"/PlanetSide/");
+
             }
             catch
             {
@@ -46,6 +77,8 @@ namespace PSUtil.Update
                             File.Delete(files[i]);
                         }
                         break;
+                    case ".ini":
+                        break;
                     case ".lst":
                         break;
                     case ".bmp":
@@ -58,6 +91,8 @@ namespace PSUtil.Update
                         File.Delete(files[i]);
                         break;
                 }
+                double progress = ((double)i / (double)files.Length * 50);
+                PatchProgress = Convert.ToInt32(progress);
             }
         }
     }

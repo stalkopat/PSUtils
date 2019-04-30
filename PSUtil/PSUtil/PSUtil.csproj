@@ -58,6 +58,7 @@
     <Compile Include="Settings\Server.cs" />
     <Compile Include="Update\Patch.cs" />
     <Compile Include="Update\Patcher.cs" />
+    <Compile Include="Verification\Checksums.cs" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>

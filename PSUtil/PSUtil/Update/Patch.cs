@@ -6,12 +6,14 @@ using System.Threading.Tasks;
 using System.IO;
 using System.IO.Compression;
 using Newtonsoft.Json;
+using PSUtil.Verification;
 
 namespace PSUtil.Update
 {
     public class Patch
     {
         public List<String> Modified_Files = new List<String>();
+        public String ExpectedHash;
         public String DownloadURL;
         public String Name;
         String DownloadedPath;
@@ -73,11 +75,20 @@ namespace PSUtil.Update
                 reader.Dispose();
                 Name = configpatch.Name;
                 DownloadedPath = Directory.GetCurrentDirectory() + @"/ModDir/" + Name + "/";
+                try
+                {
+                    Directory.Delete(DownloadedPath,true);
+                }
+                catch
+                {
+
+                }
                 tempdir.MoveTo(DownloadedPath);
                 Modified_Files = configpatch.Modified_Files;
             }
 
         }
+        
     }
     class MalFormedPatchException : Exception
     {

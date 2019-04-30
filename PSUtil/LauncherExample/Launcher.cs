@@ -15,21 +15,27 @@ using PSUtil.Settings;
 using Newtonsoft.Json;
 using System.IO;
 using PSUtil.Update;
+using System.Diagnostics;
+
 namespace LauncherExample
 {
-    public partial class Launcher :  MetroForm
+    public partial class Launcher : MetroForm
     {
         public Client Client = Client.RestoreClient();
+        bool hasheractive = false;
         public Launcher()
         {
+
             InitializeComponent();
-            ThreadPool.QueueUserWorkItem(x => {
+            ThreadPool.QueueUserWorkItem(x =>
+            {
                 while (true) //Updates UI
                 {
-                    ProgressBar.Invoke(new Action(() => {
+                    ProgressBar.Invoke(new Action(() =>
+                    {
                         int Progress = Client.GetProgress();
                         ProgressBar.Value = Progress;
-                        
+
                     }));
                     DownloadStatus.Invoke(new Action(() => { DownloadStatus.Text = Client.getInstallStatusMessage(); }));
                     InstallationStatus.Invoke(new Action(() => { InstallationStatus.Text = Client.InstallationStatus.ToString(); }));
@@ -45,9 +51,10 @@ namespace LauncherExample
                             LaunchButton.Text = "INSTALL";
                         }
                     }));
-                    InstalledMods.Invoke(new Action(() => {
+                    InstalledMods.Invoke(new Action(() =>
+                    {
                         string Patches = "";
-                        foreach(Patch patch in Client.CurrentlyApplied)
+                        foreach (Patch patch in Client.CurrentlyApplied)
                         {
                             Patches += patch.Name + "\n";
                         }
@@ -56,12 +63,12 @@ namespace LauncherExample
                     InstalledMods.Invoke(new Action(() => { InstalledMods.Text = Client.getInstalledPatches(); }));
                     GameStatus.Invoke(new Action(() => { GameStatus.Text = Client.gameState().ToString(); }));
                     Thread.Sleep(100);
-                    
+
                 }
             });
-            
+
         }
-        
+
         private void Launcher_FormClosing(object sender, FormClosingEventArgs e)
         {
             Client.SaveClient();
@@ -92,6 +99,32 @@ namespace LauncherExample
         {
             ThreadPool.QueueUserWorkItem(x => { Client.RestoreInstall(); });
         }
+
+        private void metroButton3_Click(object sender, EventArgs e)
+        {
+            ThreadPool.QueueUserWorkItem(a =>
+            {
+                bool integrity = Client.getFileIntegrity();
+                string outputtxt = "";
+                if (integrity)
+                {
+                    outputtxt = "No Errors";
+                }
+                else
+                {
+                    outputtxt = "Problem with\ninstallation detected";
+                }
+                IntegrityStatus.Invoke(new Action(() => {
+                    IntegrityStatus.Text = outputtxt;
+                }));
+                var hashvar = Client.HashSum;
+                InstallationHash.Invoke(new Action(() =>
+                {
+                    InstallationHash.Text = hashvar;
+                }));
+                Debug.WriteLine(hashvar);
+            });
+        }
     }
-    
+
 }

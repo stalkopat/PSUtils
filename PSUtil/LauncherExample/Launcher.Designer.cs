@@ -43,6 +43,11 @@
             this.metroLabel4 = new MetroFramework.Controls.MetroLabel();
             this.metroButton1 = new MetroFramework.Controls.MetroButton();
             this.metroButton2 = new MetroFramework.Controls.MetroButton();
+            this.metroLabel5 = new MetroFramework.Controls.MetroLabel();
+            this.metroButton3 = new MetroFramework.Controls.MetroButton();
+            this.metroLabel6 = new MetroFramework.Controls.MetroLabel();
+            this.IntegrityStatus = new MetroFramework.Controls.MetroLabel();
+            this.InstallationHash = new MetroFramework.Controls.MetroTextBox();
             this.SuspendLayout();
             // 
             // ProgressBar
@@ -170,11 +175,59 @@
             this.metroButton2.Text = "Remove All Patches";
             this.metroButton2.Click += new System.EventHandler(this.metroButton2_Click);
             // 
+            // metroLabel5
+            // 
+            this.metroLabel5.AutoSize = true;
+            this.metroLabel5.Location = new System.Drawing.Point(23, 131);
+            this.metroLabel5.Name = "metroLabel5";
+            this.metroLabel5.Size = new System.Drawing.Size(88, 19);
+            this.metroLabel5.TabIndex = 15;
+            this.metroLabel5.Text = "Current Hash:";
+            // 
+            // metroButton3
+            // 
+            this.metroButton3.Location = new System.Drawing.Point(641, 212);
+            this.metroButton3.Name = "metroButton3";
+            this.metroButton3.Size = new System.Drawing.Size(136, 23);
+            this.metroButton3.TabIndex = 17;
+            this.metroButton3.Text = "Verify GameInstallation";
+            this.metroButton3.Click += new System.EventHandler(this.metroButton3_Click);
+            // 
+            // metroLabel6
+            // 
+            this.metroLabel6.AutoSize = true;
+            this.metroLabel6.Location = new System.Drawing.Point(531, 238);
+            this.metroLabel6.Name = "metroLabel6";
+            this.metroLabel6.Size = new System.Drawing.Size(111, 38);
+            this.metroLabel6.TabIndex = 18;
+            this.metroLabel6.Text = "Current\r\nInstallation Status:";
+            // 
+            // IntegrityStatus
+            // 
+            this.IntegrityStatus.AutoSize = true;
+            this.IntegrityStatus.Location = new System.Drawing.Point(641, 257);
+            this.IntegrityStatus.Name = "IntegrityStatus";
+            this.IntegrityStatus.Size = new System.Drawing.Size(66, 19);
+            this.IntegrityStatus.TabIndex = 19;
+            this.IntegrityStatus.Text = "No Errors";
+            // 
+            // InstallationHash
+            // 
+            this.InstallationHash.Location = new System.Drawing.Point(141, 131);
+            this.InstallationHash.Name = "InstallationHash";
+            this.InstallationHash.Size = new System.Drawing.Size(135, 23);
+            this.InstallationHash.TabIndex = 20;
+            // 
             // Launcher
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 450);
+            this.Controls.Add(this.InstallationHash);
+            this.Controls.Add(this.IntegrityStatus);
+            this.Controls.Add(this.metroLabel6);
+            this.Controls.Add(this.metroButton3);
+            this.Controls.Add(this.metroLabel5);
             this.Controls.Add(this.metroButton2);
             this.Controls.Add(this.metroButton1);
             this.Controls.Add(this.metroLabel4);
@@ -216,6 +269,11 @@
         private MetroFramework.Controls.MetroLabel metroLabel4;
         private MetroFramework.Controls.MetroButton metroButton1;
         private MetroFramework.Controls.MetroButton metroButton2;
+        private MetroFramework.Controls.MetroLabel metroLabel5;
+        private MetroFramework.Controls.MetroButton metroButton3;
+        private MetroFramework.Controls.MetroLabel metroLabel6;
+        private MetroFramework.Controls.MetroLabel IntegrityStatus;
+        private MetroFramework.Controls.MetroTextBox InstallationHash;
     }
 }
 
