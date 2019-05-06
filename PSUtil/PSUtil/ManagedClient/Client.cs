@@ -39,6 +39,8 @@ namespace PSUtil.ManagedClient
             inProgressOperation = InProgressOperation.Modding;
             patcher.ApplyPatch(patch, Settings);
             CurrentlyApplied.Add(patch);
+            inProgressOperation = InProgressOperation.Verification;
+            getFileIntegrity();
             InstallationStatus = InstallationStatus.Modded;
             inProgressOperation = InProgressOperation.None;
         }
@@ -66,7 +68,10 @@ namespace PSUtil.ManagedClient
         {
             inProgressOperation = InProgressOperation.Restore;
             patcher.RestoreBaseInstall();
+            patcher.IntegrityCheck(Settings);
             CurrentlyApplied = new List<Patch>();
+            inProgressOperation = InProgressOperation.Verification;
+            HashSum = patcher.currenthash;
             InstallationStatus = InstallationStatus.Installed;
             inProgressOperation = InProgressOperation.None;
         }
@@ -74,6 +79,7 @@ namespace PSUtil.ManagedClient
         {
             inProgressOperation = InProgressOperation.Verification;
             var rtn = Checksums.GetInstallationHash(Settings);
+            HashSum = rtn;
             inProgressOperation = InProgressOperation.None;
             return rtn;
         }
@@ -148,6 +154,10 @@ namespace PSUtil.ManagedClient
         public GameState gameState()
         {
             return launcher.instance.gameState;
+        }
+        public String CheckServerCompatibility()
+        {
+            return ServerCompatibility.GetServerCompatibility(Settings.PlayServer.ToString(), patcher.currenthash);
         }
         public string getInstallStatusMessage()
         {

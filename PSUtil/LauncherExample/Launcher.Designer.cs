@@ -48,6 +48,8 @@
             this.metroLabel6 = new MetroFramework.Controls.MetroLabel();
             this.IntegrityStatus = new MetroFramework.Controls.MetroLabel();
             this.InstallationHash = new MetroFramework.Controls.MetroTextBox();
+            this.metroButton4 = new MetroFramework.Controls.MetroButton();
+            this.ServerCompatibilityl = new MetroFramework.Controls.MetroLabel();
             this.SuspendLayout();
             // 
             // ProgressBar
@@ -218,11 +220,30 @@
             this.InstallationHash.Size = new System.Drawing.Size(135, 23);
             this.InstallationHash.TabIndex = 20;
             // 
+            // metroButton4
+            // 
+            this.metroButton4.Location = new System.Drawing.Point(23, 183);
+            this.metroButton4.Name = "metroButton4";
+            this.metroButton4.Size = new System.Drawing.Size(162, 23);
+            this.metroButton4.TabIndex = 21;
+            this.metroButton4.Text = "GetServerCompatibility";
+            this.metroButton4.Click += new System.EventHandler(this.metroButton4_Click);
+            // 
+            // ServerCompatibilityl
+            // 
+            this.ServerCompatibilityl.AutoSize = true;
+            this.ServerCompatibilityl.Location = new System.Drawing.Point(23, 209);
+            this.ServerCompatibilityl.Name = "ServerCompatibilityl";
+            this.ServerCompatibilityl.Size = new System.Drawing.Size(0, 0);
+            this.ServerCompatibilityl.TabIndex = 22;
+            // 
             // Launcher
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 450);
+            this.Controls.Add(this.ServerCompatibilityl);
+            this.Controls.Add(this.metroButton4);
             this.Controls.Add(this.InstallationHash);
             this.Controls.Add(this.IntegrityStatus);
             this.Controls.Add(this.metroLabel6);
@@ -247,6 +268,7 @@
             this.Resizable = false;
             this.Text = "PSUtil Launcher";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Launcher_FormClosing);
+            this.Load += new System.EventHandler(this.Launcher_Load);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -274,6 +296,8 @@
         private MetroFramework.Controls.MetroLabel metroLabel6;
         private MetroFramework.Controls.MetroLabel IntegrityStatus;
         private MetroFramework.Controls.MetroTextBox InstallationHash;
+        private MetroFramework.Controls.MetroButton metroButton4;
+        private MetroFramework.Controls.MetroLabel ServerCompatibilityl;
     }
 }
 

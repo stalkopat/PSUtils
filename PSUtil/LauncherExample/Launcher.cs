@@ -31,6 +31,9 @@ namespace LauncherExample
             {
                 while (true) //Updates UI
                 {
+                    InstallationHash.Invoke(new Action(() => {
+                        InstallationHash.Text = Client.HashSum;
+                    }));
                     ProgressBar.Invoke(new Action(() =>
                     {
                         int Progress = Client.GetProgress();
@@ -118,12 +121,24 @@ namespace LauncherExample
                     IntegrityStatus.Text = outputtxt;
                 }));
                 var hashvar = Client.HashSum;
-                InstallationHash.Invoke(new Action(() =>
-                {
-                    InstallationHash.Text = hashvar;
-                }));
                 Debug.WriteLine(hashvar);
             });
+        }
+
+        private void metroButton4_Click(object sender, EventArgs e)
+        {
+            Client.SetServer(new Server(ServerTextBox.Text));
+            ThreadPool.QueueUserWorkItem(x => {
+                string ServerCompatibilitytxt = Client.CheckServerCompatibility();
+                ServerCompatibilityl.Invoke(new Action(() => {
+                    ServerCompatibilityl.Text = ServerCompatibilitytxt;
+                }));
+                });
+        }
+
+        private void Launcher_Load(object sender, EventArgs e)
+        {
+
         }
     }
 
