@@ -176,7 +176,7 @@ namespace PSUtil.ManagedClient
                     return "";
                 }
             }
-            else if(inProgressOperation == InProgressOperation.None)
+            else if(inProgressOperation == InProgressOperation.None&& InstallationStatus == InstallationStatus.Installed)
             {
                 return "Ready to Play!";
             }else if(inProgressOperation == InProgressOperation.Modding)
@@ -185,6 +185,9 @@ namespace PSUtil.ManagedClient
             }else if(inProgressOperation == InProgressOperation.Restore)
             {
                 return "Restoring Original Installation...";
+            }else if(inProgressOperation == InProgressOperation.Verification)
+            {
+                return "Verifing the Installation...";
             }
             else
             {

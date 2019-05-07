@@ -17,6 +17,9 @@ namespace PSUtil.Settings
                 if (Directory.Exists(value))
                 {
                     _LaunchPath = value;
+                }else if(value == null)
+                {
+                    _LaunchPath = null;
                 }
                 else
                 {

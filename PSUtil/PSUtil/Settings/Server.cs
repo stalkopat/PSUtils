@@ -10,8 +10,14 @@ namespace PSUtil.Settings
     {
         public Server(String IPPORT)
         {
-            IP = IPPORT.Split(':')[0];
-            Port = UInt16.Parse(IPPORT.Split(':')[1]);
+            try { 
+                IP = IPPORT.Split(':')[0];
+                Port = UInt16.Parse(IPPORT.Split(':')[1]);
+            }
+            catch
+            {
+                IP = IPPORT;
+            }
         }
         public UInt16 Port;
         public String IP;

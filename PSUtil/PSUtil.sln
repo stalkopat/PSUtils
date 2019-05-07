@@ -11,6 +11,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LauncherExample", "Launcher
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ServerVerificationTest", "ServerVerificationTest\ServerVerificationTest.csproj", "{9D2A62D5-5DE8-415B-91C3-9D1D9D32061A}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Launcher", "Launcher\Launcher.csproj", "{5C77DBC8-4250-4ABA-94F9-59AB82433F51}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -33,6 +35,10 @@ Global
 		{9D2A62D5-5DE8-415B-91C3-9D1D9D32061A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9D2A62D5-5DE8-415B-91C3-9D1D9D32061A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9D2A62D5-5DE8-415B-91C3-9D1D9D32061A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5C77DBC8-4250-4ABA-94F9-59AB82433F51}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5C77DBC8-4250-4ABA-94F9-59AB82433F51}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5C77DBC8-4250-4ABA-94F9-59AB82433F51}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5C77DBC8-4250-4ABA-94F9-59AB82433F51}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
